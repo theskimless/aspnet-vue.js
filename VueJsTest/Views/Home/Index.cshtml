@@ -1,0 +1,71 @@
+﻿<div id="app">
+    <!-- FIRST PAGE -->
+    <div class="fp">
+        <div class="wrap">
+            <div class="d-flex main-nav">
+                <!-- <div>Element 1</div> -->
+                <div nav-anchor="schedule">Расписание <div><img class="arrow-down" src="imgs/chevron-right.svg" alt=""></div></div>
+                <!-- <div>Element 5</div> -->
+            </div>
+
+            <!-- SLIDER -->
+            <div class="slider-wrap">
+                <div class="slider-btn slider-btn-left" @@click="slideBtn(0)"></div>
+                <!-- <transition name="slide-fade" mode="out-in"> -->
+                <slider class="slider" v-for="slide in slides" v-bind:slide="slide"></slider>
+                <!-- </transition> -->
+                <div class="slider-btn slider-btn-right" @@click="slideBtn(1)"></div>
+                <div class="slider-nav">
+                    <div class="slider-dot" v-for="(dot, index) in slides" :class="{'slider-dot-active': dot.isActive}" @@click="dotBtn(index)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div id="schedule">
+            <div class="s-title">Расписание</div>
+            <div>
+                <div class="d-flex schedule-btns">
+                    <div class="schedule-btn"
+                         v-for="(group, index) in groups"
+                         :class="{'schedule-btn-active': index === groupIndex}"
+                         @@click="selectGroup(group, index)">
+                        {{group.number}}
+                    </div>
+                </div>
+                <div class="schedule-content">
+                    <div class="d-flex sc-cont" v-for="(content, key) in group.content" v-if="Object.keys(content).length > 0">
+                        <div class="sc-day"><div v-for="letter in key">{{letter}}</div></div>
+                        <div class="d-flex sc-lessons-n">
+                            <div class="d-flex" v-for="(lesson, key) in content">{{key}}</div>
+                            <!-- <div class="d-flex" v-if="Object.keys(content).length === 0"></div> -->
+                        </div>
+                        <div class="d-flex sc-lessons">
+                            <div class="d-flex" v-for="lesson in content">{{lesson}}</div>
+                            <!-- <div class="d-flex" v-if="Object.keys(content).length === 0">No lessons</div> -->
+                        </div>
+                    </div>
+
+                    <select v-model="lessonDay">
+                        <option disabled value="">Day</option>
+                        <option value="monday">Monday</option>
+                        <option value="tuesday">Tuesday</option>
+                        <option value="wednesday">Wednesday</option>
+                        <option value="thursday">Thursday</option>
+                        <option value="friday">Friday</option>
+                    </select>
+                    <input v-model="lessonNum" type="number" min="1" max="8">
+                    <input v-model="lessonCont" type="text">
+                    <button @@click="sendData"><img src="imgs/edit.svg" alt=""> SEND</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+</div>
