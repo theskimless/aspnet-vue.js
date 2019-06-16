@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Npgsql;
 using VueJsTest.Models;
 
 namespace VueJsTest.Controllers
@@ -14,7 +15,6 @@ namespace VueJsTest.Controllers
         public string number { get; set; }
         public Content content { get; set; }
     }
-
     public class Content
     {
         public Dictionary<int, string> monday { get; set; }
@@ -22,11 +22,6 @@ namespace VueJsTest.Controllers
         public Dictionary<int, string> wednesday { get; set; }
         public Dictionary<int, string> thursday { get; set; }
         public Dictionary<int, string> friday { get; set; }
-    }
-
-    public class Test
-    {
-        public string json { get; set; }
     }
 
     public class HomeController : Controller
@@ -54,6 +49,7 @@ namespace VueJsTest.Controllers
                     friday = new Dictionary<int, string>()
                 }
             };
+
             string json = JsonConvert.SerializeObject(group1);
             return json;
         }

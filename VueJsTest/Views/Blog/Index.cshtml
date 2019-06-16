@@ -1,0 +1,41 @@
+﻿<div id="blog">
+    <div class="d-flex wrap">
+        <div class="blog-sidebar">
+            <div class="blog-sidebar-title">Рубрики</div>
+            <div class="blog-sidebar-item" v-for="rubric in rubrics">{{rubric.Name}}</div>
+        </div>
+        <div class="blog-content">
+            <div class="d-flex">
+                <form asp-action="CreatePost" method="post" style="width: 300px;">
+                    <div><b>Добавить пост</b></div>
+                    <div><span>Название</span> <input type="text" name="title" /></div>
+                    <div>
+                        <span>Рубрика</span>
+                        <select name="rubricId">
+                            <option :value="rubric.Id" v-for="rubric in rubrics">{{rubric.Name}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>Текст</span>
+                        <textarea name="text"></textarea>
+                    </div>
+                    <div><button type="submit">SEND</button></div>
+                </form>
+                <form asp-action="CreateRubric" method="post">
+                    <div><b>Добавить рубрику</b></div>
+                    <div><span>Название</span> <input type="text" name="name" /></div>
+                    <div><button type="submit">SEND</button></div>
+                </form>
+            </div>
+
+            <div class="b-post" v-for="post in posts">
+                <div class="bp-info">{{post.Date}}</div>
+                <div class="bp-title">{{post.Title}}</div>
+                <div class="bp-content">
+                    <p>{{post.Data}}</p>
+                </div>
+                <div class="bp-readmore-btn">Читать дальше</div>
+            </div>
+        </div>
+    </div>
+</div>

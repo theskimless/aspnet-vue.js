@@ -27,3 +27,4 @@ C:\Users\Vitaliy\source\repos\VueJsTest\VueJsTest\obj\Debug\netcoreapp2.2\VueJsT
 C:\Users\Vitaliy\source\repos\VueJsTest\VueJsTest\obj\Debug\netcoreapp2.2\VueJsTest.dll
 C:\Users\Vitaliy\source\repos\VueJsTest\VueJsTest\obj\Debug\netcoreapp2.2\VueJsTest.pdb
 C:\Users\Vitaliy\source\repos\VueJsTest\VueJsTest\obj\Debug\netcoreapp2.2\VueJsTest.csproj.CopyComplete
+C:\Users\Vitaliy\source\repos\VueJsTest\VueJsTest\obj\Debug\netcoreapp2.2\Razor\Views\Blog\Index.g.cshtml.cs

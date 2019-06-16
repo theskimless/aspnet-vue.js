@@ -9,10 +9,9 @@
 </head>
 <body>
     @*<partial name="_CookieConsentPartial" />*@
-    <div class="d-flex top-wrap">
-        <div class="tw-menu-l tw-menu-l-active">Главная</div>
-        <div class="tw-menu-l">О нас</div>
-        <div class="top-logo"><img src="imgs/logo.png" alt=""></div>
+    <div class="d-flex top-wrap" id="header-nav">
+        <a v-for="link in links" class="tw-menu-l" :class="{'tw-menu-l-active': link.url === currentRoute}" :href="link.url">{{link.name}}</a>
+        <div class="top-logo"><img src="~/imgs/logo.png" alt=""></div>
         <div class="tw-menu-l">Element2</div>
         <div class="tw-menu-l">Element3</div>
     </div>

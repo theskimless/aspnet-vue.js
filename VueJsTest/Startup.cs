@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VueJsTest.Models;
 
 namespace VueJsTest
 {
@@ -31,6 +32,7 @@ namespace VueJsTest
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>().BuildServiceProvider();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -57,7 +59,7 @@ namespace VueJsTest
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Blog}/{action=Index}/{id?}");
             });
         }
     }

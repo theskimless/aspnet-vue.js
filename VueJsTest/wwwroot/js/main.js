@@ -2,23 +2,69 @@
     console.log(data);
 }
 
+//HEADER NAV
+var headerNav = new Vue({
+    el: "#header-nav",
+    data: {
+        currentRoute: window.location.pathname,
+        links: [
+            { name: "Главная", url: "/Home/Index" },
+            { name: "Блог", url: "/Blog/Index" }
+        ]
+    }
+});
+
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+//BLOG PAGE
+var blog = new Vue({
+    el: "#blog",
+    data: {
+        rubrics: [],
+        posts: []
+    },
+    methods: {
+        getJson() {
+            axios.get("/Blog/SendJson")
+                .then((response) => {
+                    var data = response.data;
+                    var rubrics = data.Rubrics;
+                    var posts = data.Posts;
+                    _(data);
+
+                    this.rubrics = rubrics;
+                    for (var key in posts) {
+                        var newDate = new Date(posts[key].Date);
+                        posts[key].Date = newDate.getDate() + " " + days[newDate.getDay()] + ", " + newDate.getFullYear();
+                    }
+                    this.posts = posts;
+                })
+                .catch(function(err) {
+                    _(err);
+                });
+        }
+    },
+    created() {
+        this.getJson();
+    }
+});
+
+//INDEX PAGE
 Vue.component("slider", {
     props: ["slide"],
     template: `
         <img class="slide" :class="{'slide-active': slide.isActive}"  :src="slide.imgSrc" alt="">
     `
 });
-
 var app = new Vue({
-    el: '#app',
+    el: "#app",
     data: {
         lessonDay: "",
         lessonNum: 1,
         lessonCont: "",
         sliderIndex: 0,
         slides: [
-            { imgSrc: "imgs/slide1.jpg", isActive: true },
-            { imgSrc: "imgs/slide2.jpg", isActive: false }
+            { imgSrc: "/imgs/slide1.jpg", isActive: true },
+            { imgSrc: "/imgs/slide2.jpg", isActive: false }
         ],
         groupIndex: 0,
         groups: [
@@ -79,7 +125,7 @@ var app = new Vue({
         },
         getJson: function () {
             var test = this;
-            axios.get("Home/SendJson")
+            axios.get("/Home/SendJson")
                 .then((response) => {
                     this.groups[0] = response.data;
                     this.group = this.groups[0];
@@ -89,9 +135,9 @@ var app = new Vue({
                 });
         },
         sendData() {
-            axios.post("Home/GetJson", this.groups)
+            axios.post("/Home/GetJson", this.groups)
                 .then((response) => {
-                    _(response.data)
+                    _(response);
                 })
                 .catch(function (err) {
                     _(err);
@@ -116,7 +162,6 @@ var app = new Vue({
         }
     }
 });
-
 function getLesson() {
     this.lessonCont = this.groups[this.groupIndex].content[this.lessonDay] ? this.groups[this.groupIndex].content[this.lessonDay][this.lessonNum] : "No lesson";
 }
