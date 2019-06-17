@@ -1,40 +1,53 @@
 ﻿<div id="blog">
     <div class="d-flex wrap">
+        <!-- RUBRICS -->
         <div class="blog-sidebar">
             <div class="blog-sidebar-title">Рубрики</div>
-            <div class="blog-sidebar-item" v-for="rubric in rubrics">{{rubric.Name}}</div>
+            <div class="blog-sidebar-item" v-for="(rubric, key) in rubrics" @@click="selectedRubric = key">{{rubric}}</div>
         </div>
         <div class="blog-content">
-            <div class="d-flex">
-                <form asp-action="CreatePost" method="post" style="width: 300px;">
+            <!-- ADD POST OR RUBRIC -->
+            <div class="b-post d-flex">
+                <form asp-action="CreatePost" method="post" class="b-post-form">
                     <div><b>Добавить пост</b></div>
-                    <div><span>Название</span> <input type="text" name="title" /></div>
-                    <div>
-                        <span>Рубрика</span>
-                        <select name="rubricId">
-                            <option :value="rubric.Id" v-for="rubric in rubrics">{{rubric.Name}}</option>
-                        </select>
+                    <div><div>Название</div> <input type="text" name="title" /></div>
+                    <div class="d-flex">
+                        <div>Рубрики</div>
+                        <div class="b-create-post-select-wrap">
+                            <div class="b-create-post-select" v-for="(select, key) in rubricSelectsArr">
+                                <select v-model="rubricSelectsArr[key]">
+                                    <option :value="key" v-for="(rubric, key) in rubrics">{{rubric}}</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn" @@click="addRubricSelect">Добавить еще</button>
+                        </div>
+                        <input type="hidden" name="rubricsId" :value="rubricSelectsArr" />
                     </div>
                     <div>
-                        <span>Текст</span>
+                        <div>Текст</div>
                         <textarea name="text"></textarea>
                     </div>
                     <div><button type="submit">SEND</button></div>
                 </form>
-                <form asp-action="CreateRubric" method="post">
+                <form asp-action="CreateRubric" method="post" class="b-post-form">
                     <div><b>Добавить рубрику</b></div>
                     <div><span>Название</span> <input type="text" name="name" /></div>
                     <div><button type="submit">SEND</button></div>
                 </form>
             </div>
 
-            <div class="b-post" v-for="post in posts">
-                <div class="bp-info">{{post.Date}}</div>
+            <!-- POSTS -->
+            <div class="b-post" v-show="posts.length === 0">
+                <div class="bp-title">Посты отсутствуют</div>
+            </div>
+
+            <div class="b-post" v-for="post in posts" v-show="hasSelectedRubric(post.Id)">
+                <div class="bp-info">{{post.Date}}{{getPostRubrics(post.Id)}}</div>
                 <div class="bp-title">{{post.Title}}</div>
                 <div class="bp-content">
                     <p>{{post.Data}}</p>
                 </div>
-                <div class="bp-readmore-btn">Читать дальше</div>
+                @*<div class="bp-readmore-btn">Читать дальше</div>*@
             </div>
         </div>
     </div>

@@ -7,10 +7,8 @@ namespace VueJsTest.Models
 {
     public class PostRubric
     {
+        public int Id { get; set; }
         public int PostId { get; set; }
-        public Post Post { get; set; }
-
         public int RubricId { get; set; }
-        public Rubric Rubric { get; set; }
     }
 }

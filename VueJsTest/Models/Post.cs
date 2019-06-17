@@ -11,11 +11,5 @@ namespace VueJsTest.Models
         public string Title { get; set; }
         public string Data { get; set; }
         public DateTime Date { get; set; }
-        public List<PostRubric> PostRubrics { get; set; }
-
-        public Post()
-        {
-            PostRubrics = new List<PostRubric>();
-        }
     }
 }

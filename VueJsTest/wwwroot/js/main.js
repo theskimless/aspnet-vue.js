@@ -14,29 +14,61 @@ var headerNav = new Vue({
     }
 });
 
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const months = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
 //BLOG PAGE
 var blog = new Vue({
     el: "#blog",
     data: {
         rubrics: [],
-        posts: []
+        posts: [],
+        postRubrics: [],
+        selectedRubric: 0,
+        rubricSelectsArr: [0]
     },
     methods: {
+        addRubricSelect() {
+            this.rubricSelectsArr.push(0);
+        },
+        hasSelectedRubric(postId) {
+            //SHOW ALL POSTS
+            if (this.selectedRubric === 0) return true;
+            //SHOW IF HAS SELECTED RUBRIC
+            for (var i = 0; i < this.postRubrics.length; i++) {
+                if (this.postRubrics[i].PostId === postId && this.selectedRubric === this.postRubrics[i].RubricId) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        getPostRubrics(postId) {
+            var rubrics = "";
+            for (var i = 0; i < this.postRubrics.length; i++) {
+                if (this.postRubrics[i].PostId === postId) {
+                    rubrics += " / " + this.rubrics[this.postRubrics[i].RubricId];
+                }
+            }
+            return rubrics;
+        },
         getJson() {
             axios.get("/Blog/SendJson")
                 .then((response) => {
                     var data = response.data;
-                    var rubrics = data.Rubrics;
                     var posts = data.Posts;
-                    _(data);
+                    //data.Rubrics = [0: {Id: 1, Name: "Text"}]
+                    var rubrics = data.Rubrics.map(p => p.Name);
+                    rubrics.unshift("Все");
+                    //rubrics = [0: "Все", 1: "Text"]
 
-                    this.rubrics = rubrics;
+                    //TRANSFORM DATE 1 Января, 2019
                     for (var key in posts) {
                         var newDate = new Date(posts[key].Date);
-                        posts[key].Date = newDate.getDate() + " " + days[newDate.getDay()] + ", " + newDate.getFullYear();
+                        posts[key].Date = newDate.getDate() + " " + months[newDate.getMonth()] + ", " + newDate.getFullYear();
                     }
-                    this.posts = posts;
+
+                    this.postRubrics = data.PostRubrics;
+                    this.rubrics = rubrics;
+                    //SHOW THE NEWEST POSTS IN THE TOP
+                    this.posts = posts.slice().reverse();
                 })
                 .catch(function(err) {
                     _(err);

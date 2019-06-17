@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,16 @@ namespace VueJsTest.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatePost(string title, int rubricId, string text)
+        public IActionResult CreatePost(string title, string rubricsId, string text)
         {
             var post = new Post { Title = title, Data = text, Date = DateTime.Now };
             _dbContext.Posts.Add(post);
             _dbContext.SaveChanges();
 
-            post.PostRubrics.Add(new PostRubric { PostId = post.Id, RubricId = rubricId });
+            foreach(var rubric in rubricsId.Split(","))
+            {
+                _dbContext.PostRubrics.Add(new PostRubric { PostId = post.Id, RubricId = int.Parse(rubric) });
+            }
             _dbContext.SaveChanges();
 
             return RedirectToAction("Index");
@@ -43,9 +47,10 @@ namespace VueJsTest.Controllers
             return RedirectToAction("Index");
         }
 
+        //RETURN DATA
         public string SendJson()
         {
-            var indexView = new IndexView { Rubrics = _dbContext.Rubrics.ToList(), Posts = _dbContext.Posts.ToList() };
+            var indexView = new IndexView { Rubrics = _dbContext.Rubrics.ToList(), Posts = _dbContext.Posts.ToList(), PostRubrics = _dbContext.PostRubrics.ToList() };
             return JsonConvert.SerializeObject(indexView);
         }
     }
@@ -54,5 +59,6 @@ namespace VueJsTest.Controllers
     {
         public List<Rubric> Rubrics { get; set; }
         public List<Post> Posts { get; set; }
+        public List<PostRubric> PostRubrics { get; set; }
     }
 }
