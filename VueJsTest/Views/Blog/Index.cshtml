@@ -42,7 +42,7 @@
             </div>
 
             <div class="b-post" v-for="post in posts" v-show="hasSelectedRubric(post.Id)">
-                <div class="bp-info">{{post.Date}}{{getPostRubrics(post.Id)}}</div>
+                <div class="d-flex bp-info"><div>{{post.Date}}{{getPostRubrics(post.Id)}}</div><div><form asp-action="DeletePost" method="post"><input type="hidden" name="postId" :value="post.Id" /><button type="submit"><img width="15" src="~/imgs/trash.svg" alt="Delete post" /></button></form></div></div>
                 <div class="bp-title">{{post.Title}}</div>
                 <div class="bp-content">
                     <p>{{post.Data}}</p>

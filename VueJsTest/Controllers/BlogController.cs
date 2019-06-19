@@ -23,6 +23,20 @@ namespace VueJsTest.Controllers
         }
 
         [HttpPost]
+        public IActionResult DeletePost(int postId)
+        {
+            _dbContext.Posts.Remove(_dbContext.Posts.SingleOrDefault(p => p.Id == postId));
+
+            foreach (var item in _dbContext.PostRubrics.Where(p => p.PostId == postId))
+            {
+                _dbContext.PostRubrics.Remove(item);
+            }
+
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
         public IActionResult CreatePost(string title, string rubricsId, string text)
         {
             var post = new Post { Title = title, Data = text, Date = DateTime.Now };
